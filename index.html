@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Resume Optimizer</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            overflow-x: hidden;
+        }
+
+        /* Sticky Navbar */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3c72;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        nav ul li a:hover {
+            background: #1e3c72;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        nav ul li.back-button {
+            display: none;
+        }
+
+        @media (max-width: 760px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                background: #fff;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 10px 20px;
+                border-radius: 8px;
+                width: 200px;
+                animation: slideIn 0.3s ease-in-out;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            nav ul li.back-button {
+                display: block;
+                margin-top: 10px;
+            }
+
+            .menu-toggle {
+                display: block;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #333;
+                position: absolute;
+                top: 10px;
+                right: 20px;
+            }
+
+            nav .auth-container {
+                display: flex;
+                align-items: center;
+                gap: 5px; /* Reduce space between auth-container items */
+                margin-right: 40px; /* Add margin to avoid overlap with menu-toggle */
+                animation: fadeIn 0.5s ease-in-out;
+            }
+
+            nav .auth-container a {
+                text-decoration: none;
+                color: #333;
+                font-size: 1rem;
+                font-weight: 500;
+            }
+
+            nav .auth-container a:hover {
+                color: #1e3c72;
+            }
+        }
+
+        @media (min-width: 761px) {
+            nav ul {
+                display: flex;
+                flex-direction: row;
+                position: static;
+                background: none;
+                box-shadow: none;
+                padding: 0;
+                border-radius: 0;
+                width: auto;
+            }
+
+            .menu-toggle {
+                display: none; /* Hide the menu-toggle in desktop view */
+            }
+
+            nav ul li.back-button {
+                display: none;
+            }
+        }
+
+        nav ul li.back-button {
+            display: none;
+        }
+
+        /* Improved List Style */
+        nav ul li a {
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        nav ul li a:hover {
+            background: #1e3c72;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        nav ul li a i {
+            font-size: 1.2rem;
+        }
+
+        /* Additional styling for a more professional look */
+        nav ul li a {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul li a:hover {
+            background: #2a5298;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        nav ul li a i {
+            font-size: 1.2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .hero button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #fff;
+            color: #1e3c72;
+            cursor: pointer;
+            transition: background 0.3s;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .hero button:hover {
+            background: #f0f0f0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Footer Section */
+        .footer {
+            background-color: #1e3c72;
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .footer .logo img {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 50%;
+            padding: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .footer p {
+            font-size: 1rem;
+            margin: 10px 0;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .footer .social-icons {
+            margin-top: 20px;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .footer .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer .social-icons a:hover {
+            color: #f0f0f0;
+            transform: scale(1.2);
+        }
+
+        .footer .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .footer .footer-links a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer .footer-links a:hover {
+            color: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                padding: 20px 10px;
+            }
+
+            .footer .logo {
+                font-size: 1.5rem;
+            }
+
+            .footer .logo img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .footer p {
+                font-size: 0.9rem;
+            }
+
+            .footer .social-icons a {
+                font-size: 1.2rem;
+            }
+
+            .footer .footer-links {
+                flex-direction: column;
+            }
+
+            .footer .footer-links a {
+                margin: 10px 0;
+            }
+        }
+
+        .section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .section-content {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+        }
+
+        .section-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .section-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .section-content form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-content input,
+        .section-content textarea {
+            padding: 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            color: #333;
+            outline: none;
+        }
+
+        .section-content button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            background: #1e3c72;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .section-content button:hover {
+            background: #2a5298;
+        }
+
+       
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">AI Resume Optimizer</div>
+       
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="feature.html">Features</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li class="back-button"><a href="index.html"><i class="fas fa-arrow-left"></i> Back</a></li>
+        </ul>
+        <div class="auth-container">
+            <a href="login.html"><i class="fas fa-user-circle fa-2x"></i></a>
+           
+        </div>
+        <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <div class="hero">
+        <h1>Optimize Your Resume with AI</h1>
+        <p>Tailor your resume to specific job descriptions and increase your chances of landing interviews.</p>
+        <button id="getStartedBtn">Get Started</button>
+    </div>
+    <script>
+        document.getElementById('getStartedBtn').addEventListener('click', function() {
+    // Scroll smoothly to the .resume section
+    const resumeSection = document.querySelector('#resu');
+    resumeSection.scrollIntoView({ behavior: 'smooth' });
+});
+    </script>
+    <div id="resu" class="section">
+        <div class="section-content">
+            <h2>Check Resume Optimization Score</h2>
+            <p>Upload your resume in PDF or DOCX format to optimize it for job applications.</p>
+            <form id="resumeForm">
+                <input type="file" id="resumeInput" accept=".pdf, .docx">
+                <button type="submit">Upload Resume</button>
+                <p id="feedbackMessage" style="font-size: 1rem; margin-top: 10px; display: none; color: #ff8c00;"></p>
+            </form>
+            <div id="analysisResult" style="margin-top: 30px; display: none;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">Resume Analysis</h3>
+                <div style="margin-top: 20px; text-align: left; background: #f4f4f4; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <p style="font-size: 1.2rem; font-weight: 600; color: #333;">Score: <span id="resumeScore" style="color: #27ae60;">80/100</span></p>
+                    <h4 style="font-size: 1.3rem; font-weight: 600; margin-top: 10px;">Suggestions for Improvement</h4>
+                    <ul id="improvementSuggestions" style="list-style-type: disc; padding-left: 20px; color: #333;">
+                        <li>Use more specific job-related keywords.</li>
+                        <li>Consider shortening your work experience section for clarity.</li>
+                    </ul>
+                    <h4 style="font-size: 1.3rem; font-weight: 600; margin-top: 20px;">Suggested Keywords to Add</h4>
+                    <ul id="keywordSuggestions" style="list-style-type: disc; padding-left: 20px; color: #333;">
+                        <li>Data Analysis</li>
+                        <li>Project Management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('resumeForm').addEventListener('submit', function (event) {
+          event.preventDefault();
+      
+          const resumeInput = document.getElementById('resumeInput');
+          const feedbackMessage = document.getElementById('feedbackMessage');
+          const analysisResult = document.getElementById('analysisResult');
+          const resumeScore = document.getElementById('resumeScore');
+          const improvementSuggestions = document.getElementById('improvementSuggestions');
+          const keywordSuggestions = document.getElementById('keywordSuggestions');
+      
+          // Check if a file is uploaded
+          if (!resumeInput.files[0]) {
+            feedbackMessage.style.display = 'block';
+            feedbackMessage.textContent = 'Please upload a resume!';
+            return;
+          }
+      
+          // Hide feedback message
+          feedbackMessage.style.display = 'none';
+      
+          // Show analysis result container
+          analysisResult.style.display = 'block';
+      
+          // Generate a random score between 80 and 95
+          const score = Math.floor(Math.random() * (95 - 80 + 1)) + 80;
+      
+          // Common suggestions for improvement
+          const suggestions = [
+            'Use more action verbs in your work experience.',
+            'Highlight quantifiable achievements.',
+            'Ensure consistent formatting throughout the document.',
+            'Include relevant skills based on the job description.',
+            'Add a professional summary or objective at the top.'
+          ];
+      
+          // Common keywords to add
+          const keywords = [
+            'Leadership',
+            'Collaboration',
+            'Critical Thinking',
+            'Team Management',
+            'Problem-Solving',
+            'Strategic Planning',
+            'Technical Expertise',
+            'Agile Methodologies',
+            'Cloud Computing',
+            'Artificial Intelligence'
+          ];
+      
+          // Update UI with results
+          resumeScore.textContent = `${score}/100`;
+          resumeScore.style.color = score > 90 ? '#27ae60' : '#f39c12';
+      
+          // Populate improvement suggestions
+          improvementSuggestions.innerHTML = '';
+          suggestions.forEach(suggestion => {
+            const li = document.createElement('li');
+            li.textContent = suggestion;
+            improvementSuggestions.appendChild(li);
+          });
+      
+          // Populate keyword suggestions
+          keywordSuggestions.innerHTML = '';
+          keywords.forEach(keyword => {
+            const li = document.createElement('li');
+            li.textContent = keyword;
+            keywordSuggestions.appendChild(li);
+          });
+        });
+      </script>
+      
+
+    <div class="section">
+        <div class="section-content">
+          <h2>Generate Your Resume with AI</h2>
+          <p>Provide keywords and prompts to help the AI generate a personalized resume for you.</p>
+          <form id="resumeGeneratorForm" onsubmit="generatePDF(event)">
+            <input type="text" id="name" placeholder="Enter Your Name" style="margin-bottom: 10px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+            <input type="text" id="keywords" placeholder="Enter keywords (e.g., Software Engineer, Data Analyst)" style="margin-bottom: 10px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+            <textarea id="skills" placeholder="Enter your skills (e.g., JavaScript, React, Node.js)" style="margin-bottom: 10px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+            <textarea id="education" placeholder="Enter your education qualification (e.g., B.Tech in Computer Science)" style="margin-bottom: 10px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+            <textarea id="hobbies" placeholder="Enter your hobbies (e.g., Reading, Traveling, Music)" style="margin-bottom: 10px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+            <textarea id="interests" placeholder="Enter your interests (e.g., Artificial Intelligence, Cloud Computing)" style="margin-bottom: 10px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+            <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Generate Resume</button>
+          </form>
+          <div id="generatedResume" style="margin-top: 30px; display: none; text-align: left;">
+            <h3 style="font-size: 2rem; font-weight: 700;">Your AI-Generated Resume</h3>
+            <div style="background: #f4f4f4; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); color: #333;">
+              <h4 style="font-size: 1.5rem; font-weight: 600;">Personal Information</h4>
+              <p id="generatedName" style="font-size: 1.2rem;"></p>
+              <h4 style="font-size: 1.5rem; font-weight: 600; margin-top: 20px;">Skills</h4>
+              <p id="generatedSkills" style="font-size: 1.2rem;"></p>
+              <h4 style="font-size: 1.5rem; font-weight: 600; margin-top: 20px;">Education</h4>
+              <p id="generatedEducation" style="font-size: 1.2rem;"></p>
+              <h4 style="font-size: 1.5rem; font-weight: 600; margin-top: 20px;">Hobbies & Interests</h4>
+              <p id="generatedHobbies" style="font-size: 1.2rem;"></p>
+              <p id="generatedInterests" style="font-size: 1.2rem;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+      <script>
+        function generatePDF(event) {
+          event.preventDefault();
+          
+          const name = document.getElementById("name").value;
+          const keywords = document.getElementById("keywords").value;
+          const skills = document.getElementById("skills").value;
+          const education = document.getElementById("education").value;
+          const hobbies = document.getElementById("hobbies").value;
+          const interests = document.getElementById("interests").value;
+      
+          if (!name || !keywords || !skills || !education || !hobbies || !interests) {
+            alert("Please fill in all fields!");
+            return;
+          }
+      
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4",
+          });
+      
+          // Add title
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(20);
+          doc.text(name, 105, 20, { align: "center" });
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          doc.text(`Keywords: ${keywords}`, 105, 28, { align: "center" });
+          doc.line(10, 35, 200, 35); // Add a horizontal line
+      
+          // Add sections with proper spacing and formatting
+          doc.setFontSize(16);
+          doc.setFont("helvetica", "bold");
+          doc.text("Skills", 10, 45);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          doc.text(skills, 10, 50, { maxWidth: 190, lineHeightFactor: 1.5 });
+      
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(16);
+          doc.text("Education", 10, 70);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          doc.text(education, 10, 75, { maxWidth: 190, lineHeightFactor: 1.5 });
+      
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(16);
+          doc.text("Hobbies", 10, 95);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          doc.text(hobbies, 10, 100, { maxWidth: 190, lineHeightFactor: 1.5 });
+      
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(16);
+          doc.text("Interests", 10, 120);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          doc.text(interests, 10, 125, { maxWidth: 190, lineHeightFactor: 1.5 });
+      
+          // Footer
+          doc.setFont("helvetica", "italic");
+          doc.setFontSize(10);
+          doc.text("Generated by AI Resume Optimizer", 105, 285, { align: "center" });
+      
+          // Save PDF
+          doc.save(`${name}_Resume.pdf`);
+        }
+      </script>
+      
+      
+
+<div class="carousel-section" style="background-color: white; padding: 20px; text-align: center;">
+    <div class="carousel-container" style="max-width: 600px; margin: 0 auto; position: relative;">
+        <h2 style="color: #191a1b; font-family: Arial, sans-serif; margin-bottom: 20px;">Resume Templates</h2>
+        <div class="carousel" style="overflow: hidden; border: 1px solid #007bff; border-radius: 10px;">
+            <div id="carousel" class="carousel-inner" style="display: flex; transition: transform 0.5s ease;">
+                <!-- Resume 1 -->
+                <div class="carousel-item" style="min-width: 100%; padding: 20px; box-sizing: border-box;">
+                    <img src="general-resume-template@3x.jpg" alt="Resume 1" style="width: 100%; height: auto; border-radius: 5px;">
+                    <h3 style="color: #007bff; margin-top: 10px; font-family: Arial, sans-serif;">Modern Resume</h3>
+                    <p style="color: #555; font-family: Arial, sans-serif;">A sleek and professional resume format perfect for corporate jobs.</p>
+                </div>
+                <!-- Resume 2 -->
+                <div class="carousel-item" style="min-width: 100%; padding: 20px; box-sizing: border-box;">
+                    <img src="illinois-736x1041.webp" alt="Resume 2" style="width: 100%; height: auto; border-radius: 5px;">
+                    <h3 style="color: #007bff; margin-top: 10px; font-family: Arial, sans-serif;">Creative Resume</h3>
+                    <p style="color: #555; font-family: Arial, sans-serif;">Ideal for designers and creatives, with a vibrant layout.</p>
+                </div>
+                <!-- Resume 3 -->
+                <div class="carousel-item" style="min-width: 100%; padding: 20px; box-sizing: border-box;">
+                    <img src="auckland-736x1041.webp" alt="Resume 3" style="width: 100%; height: auto; border-radius: 5px;">
+                    <h3 style="color: #007bff; margin-top: 10px; font-family: Arial, sans-serif;">Minimalistic Resume</h3>
+                    <p style="color: #555; font-family: Arial, sans-serif;">A clean and minimalistic design for all professional fields.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Buttons -->
+        <button id="prev" class="carousel-button" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background-color: #007bff; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">&#8249;</button>
+        <button id="next" class="carousel-button" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background-color: #007bff; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">&#8250;</button>
+    </div>
+</div>
+
+<script>
+const carousel = document.getElementById('carousel');
+const prevButton = document.getElementById('prev');
+const nextButton = document.getElementById('next');
+let currentIndex = 0;
+
+// Update Carousel Position
+const updateCarousel = () => {
+    const itemWidth = document.querySelector('.carousel-container').offsetWidth;
+    carousel.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+};
+
+// Navigate to Previous Slide
+prevButton.addEventListener('click', () => {
+    const totalItems = carousel.children.length;
+    currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalItems - 1;
+    updateCarousel();
+});
+
+// Navigate to Next Slide
+nextButton.addEventListener('click', () => {
+    const totalItems = carousel.children.length;
+    currentIndex = (currentIndex < totalItems - 1) ? currentIndex + 1 : 0;
+    updateCarousel();
+});
+
+// Handle Window Resize
+window.addEventListener('resize', updateCarousel);
+
+// Initialize Carousel on Load
+updateCarousel();
+</script>
+
+
+    
+    <footer class="footer">
+        <div class="logo">
+            <img src="WhatsApp Image 2025-01-09 at 03.16.07_5542930a.jpg" alt="Logo">
+        </div>
+        <p>Created by Group 2</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="about.html">About us</a>
+            <a href="contact.html">Contact Us</a>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

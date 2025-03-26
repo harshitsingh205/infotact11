@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Resume Optimizer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            overflow-x: hidden;
+        }
+
+        /* Sticky Navbar */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3c72;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #1e3c72;
+            transform: scale(1.1);
+        }
+
+        nav .auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav .auth-container a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        nav .auth-container a:hover {
+            color: #1e3c72;
+        }
+
+        nav .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                background: #fff;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 10px 20px;
+                border-radius: 8px;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav ul li.back-button {
+                display: block;
+            }
+        }
+
+        nav ul li.back-button {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .hero button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #fff;
+            color: #1e3c72;
+            cursor: pointer;
+            transition: background 0.3s;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .hero button:hover {
+            background: #f0f0f0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer Section */
+        .footer {
+            background-color: #1e3c72;
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .footer .logo img {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 50%;
+            padding: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .footer p {
+            font-size: 1rem;
+            margin: 10px 0;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .footer .social-icons {
+            margin-top: 20px;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .footer .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer .social-icons a:hover {
+            color: #f0f0f0;
+            transform: scale(1.2);
+        }
+
+        .footer .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .footer .footer-links a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer .footer-links a:hover {
+            color: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                padding: 20px 10px;
+            }
+
+            .footer .logo {
+                font-size: 1.5rem;
+            }
+
+            .footer .logo img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .footer p {
+                font-size: 0.9rem;
+            }
+
+            .footer .social-icons a {
+                font-size: 1.2rem;
+            }
+
+            .footer .footer-links {
+                flex-direction: column;
+            }
+
+            .footer .footer-links a {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">AI Resume Optimizer</div>
+        <ul>
+            <li class="back-button"><a href="#"><i class="fas fa-arrow-left"></i> Back</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="auth-container">
+            <a href="#"><i class="fas fa-user-circle fa-2x"></i></a>
+            <a href="#">Login/Signup</a>
+        </div>
+        <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <div class="hero">
+        <h1>Optimize Your Resume with AI</h1>
+        <p>Tailor your resume to specific job descriptions and increase your chances of landing interviews.</p>
+        <button>Get Started</button>
+    </div>
+
+    <footer class="footer">
+        <div class="logo">
+            <img src="WhatsApp Image 2025-01-09 at 03.16.07_5542930a.jpg" alt="Logo">
+        </div>
+        <p>Created by Group 2</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

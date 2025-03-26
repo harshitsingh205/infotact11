@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="section">
+    <div class="section-content">
+        <h2>Generate Your Resume with AI</h2>
+        <p>Provide keywords and prompts to help the AI generate a personalized resume for you.</p>
+        <form id="resumeGeneratorForm">
+            <input type="text" id="name" placeholder="Enter your name" required>
+            <input type="text" id="keywords" placeholder="Enter keywords (e.g., Software Engineer, Data Analyst)" required>
+            <textarea id="skills" placeholder="Enter your skills (e.g., JavaScript, React, Node.js)" required></textarea>
+            <textarea id="education" placeholder="Enter your education qualification (e.g., B.Tech in Computer Science)" required></textarea>
+            <textarea id="hobbies" placeholder="Enter your hobbies (e.g., Reading, Traveling, Music)" required></textarea>
+            <textarea id="interests" placeholder="Enter your interests (e.g., Artificial Intelligence, Cloud Computing)" required></textarea>
+            <button type="submit">Generate Resume</button>
+        </form>
+        <div id="generatedResume" style="margin-top: 30px; display: none; text-align: left;">
+            <h3 style="font-size: 2rem; font-weight: 700;">Your AI-Generated Resume</h3>
+            <div style="background: #f4f4f4; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); color: #333;">
+                <h4 style="font-size: 1.5rem; font-weight: 600;">Personal Information</h4>
+                <p id="generatedName" style="font-size: 1.2rem;"></p>
+                <p id="generatedKeywords" style="font-size: 1.2rem;"></p>
+                <h4 style="font-size: 1.5rem; font-weight: 600; margin-top: 20px;">Skills</h4>
+                <p id="generatedSkills" style="font-size: 1.2rem;"></p>
+                <h4 style="font-size: 1.5rem; font-weight: 600; margin-top: 20px;">Education</h4>
+                <p id="generatedEducation" style="font-size: 1.2rem;"></p>
+                <h4 style="font-size: 1.5rem; font-weight: 600; margin-top: 20px;">Hobbies & Interests</h4>
+                <p id="generatedHobbies" style="font-size: 1.2rem;"></p>
+                <p id="generatedInterests" style="font-size: 1.2rem;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const resumeForm = document.getElementById('resumeGeneratorForm');
+    const generatedResume = document.getElementById('generatedResume');
+    const generatedName = document.getElementById('generatedName');
+    const generatedKeywords = document.getElementById('generatedKeywords');
+    const generatedSkills = document.getElementById('generatedSkills');
+    const generatedEducation = document.getElementById('generatedEducation');
+    const generatedHobbies = document.getElementById('generatedHobbies');
+    const generatedInterests = document.getElementById('generatedInterests');
+
+    resumeForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const keywords = document.getElementById('keywords').value;
+        const skills = document.getElementById('skills').value;
+        const education = document.getElementById('education').value;
+        const hobbies = document.getElementById('hobbies').value;
+        const interests = document.getElementById('interests').value;
+
+        generatedName.textContent = `Name: ${name}`;
+        generatedKeywords.textContent = `Keywords: ${keywords}`;
+        generatedSkills.textContent = `Skills: ${skills}`;
+        generatedEducation.textContent = `Education: ${education}`;
+        generatedHobbies.textContent = `Hobbies: ${hobbies}`;
+        generatedInterests.textContent = `Interests: ${interests}`;
+
+        generatedResume.style.display = 'block';
+
+        // Generate PDF
+        const doc = new jsPDF();
+        doc.setFontSize(16);
+        doc.text(20, 20, `Name: ${name}`);
+        doc.text(20, 30, `Keywords: ${keywords}`);
+        doc.text(20, 40, `Skills: ${skills}`);
+        doc.text(20, 50, `Education: ${education}`);
+        doc.text(20, 60, `Hobbies: ${hobbies}`);
+        doc.text(20, 70, `Interests: ${interests}`);
+        doc.save('resume.pdf');
+    });
+</script>
+
+</body>
+</html>
